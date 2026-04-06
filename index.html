@@ -1,708 +1,1384 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CV - Ridwan Sasmita | Electrical Engineer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@200;400;600;800;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <title>Ridwan Sasmita - CV Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
+    
     <style>
         :root {
-            --deep: #030b18;
-            --ocean-dark: #071a33;
-            --ocean-mid: #0d2e52;
-            --ocean: #13518f;
-            --cyan: #00e5ff;
-            --teal: #00bfa5;
-            --foam: #e0f7fa;
-            --card: rgba(7, 26, 51, 0.7);
-            --card-border: rgba(0, 229, 255, 0.12);
-            --glass: rgba(13, 46, 82, 0.4);
+            --bg-deep: #0a1628;
+            --bg-mid: #0d2137;
+            --bg-surface: #122a42;
+            --accent-primary: #00d4ff;
+            --accent-secondary: #0099cc;
+            --accent-glow: rgba(0, 212, 255, 0.3);
+            --text-primary: #e8f4f8;
+            --text-secondary: #8eb8c9;
+            --card-bg: rgba(18, 42, 66, 0.85);
+            --border-color: rgba(0, 180, 216, 0.3);
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: 'Source Sans 3', sans-serif;
-            background: var(--deep);
-            color: var(--foam);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-deep);
+            color: var(--text-primary);
             overflow-x: hidden;
             min-height: 100vh;
         }
-        h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif; }
-
-        /* ===== BACKGROUND LAUT 3D ===== */
-        .ocean-bg {
-            position: fixed; inset: 0; z-index: 0;
-            perspective: 1200px; overflow: hidden;
+        
+        h1, h2, h3, h4 {
+            font-family: 'Space Grotesk', sans-serif;
         }
-        .ocean-gradient {
-            position: absolute; width: 100%; height: 100%;
-            background:
-                radial-gradient(ellipse at 15% 45%, rgba(0,229,255,0.07) 0%, transparent 50%),
-                radial-gradient(ellipse at 85% 15%, rgba(0,191,165,0.05) 0%, transparent 40%),
-                radial-gradient(ellipse at 50% 85%, rgba(19,81,143,0.08) 0%, transparent 50%),
-                linear-gradient(180deg, var(--deep) 0%, var(--ocean-dark) 35%, var(--ocean-mid) 100%);
+        
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
         }
-        .light-ray {
-            position: absolute; top: -30%; width: 120px; height: 140%;
-            background: linear-gradient(180deg, rgba(0,229,255,0.04) 0%, transparent 80%);
-            transform-origin: top center;
-            animation: rayDrift 10s ease-in-out infinite;
+        
+        .main-content {
+            position: relative;
+            z-index: 10;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
         }
-        .light-ray:nth-child(1) { left: 15%; transform: skewX(-8deg); }
-        .light-ray:nth-child(2) { left: 35%; animation-delay: -4s; transform: skewX(-12deg); opacity: 0.6; width: 80px; }
-        .light-ray:nth-child(3) { left: 60%; animation-delay: -7s; transform: skewX(-5deg); opacity: 0.8; }
-        .light-ray:nth-child(4) { left: 80%; animation-delay: -2s; transform: skewX(-10deg); opacity: 0.5; width: 100px; }
-        @keyframes rayDrift {
-            0%, 100% { opacity: 0.3; transform: skewX(-8deg) translateX(0); }
-            50% { opacity: 0.9; transform: skewX(-8deg) translateX(20px); }
+        
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .bubble {
-            position: absolute; border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(0,229,255,0.35), rgba(0,229,255,0.03));
-            border: 1px solid rgba(0,229,255,0.12);
-            animation: bubbleUp linear infinite; pointer-events: none;
+        
+        .glass-card:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 40px var(--accent-glow);
+            transform: translateY(-2px);
         }
-        @keyframes bubbleUp {
-            0% { transform: translateY(0) translateX(0) scale(1); opacity: 0; }
-            8% { opacity: 0.7; } 85% { opacity: 0.2; }
-            100% { transform: translateY(-110vh) translateX(var(--drift)) scale(0.4); opacity: 0; }
+        
+        .header-section {
+            text-align: center;
+            padding: 3rem 0;
+            animation: fadeInDown 1s ease-out;
         }
-        .waves-wrap { position: absolute; bottom: 0; width: 100%; height: 180px; overflow: hidden; }
-        .wave-layer { position: absolute; bottom: 0; width: 200%; animation: waveSlide linear infinite; }
-        .wave-layer:nth-child(1) { animation-duration: 14s; opacity: 0.25; }
-        .wave-layer:nth-child(2) { animation-duration: 10s; animation-direction: reverse; opacity: 0.15; bottom: -8px; }
-        .wave-layer:nth-child(3) { animation-duration: 18s; opacity: 0.1; bottom: -16px; }
-        @keyframes waveSlide { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-
-        /* ===== SILUET ORANG BEKERJA ===== */
-        .worker-group { position: absolute; pointer-events: none; }
-        .wg-1 { bottom: 12%; left: 3%; }
-        .wg-2 { bottom: 20%; right: 5%; }
-        .wg-3 { bottom: 8%; left: 42%; opacity: 0.7; }
-        .worker { position: relative; opacity: 0.07; color: var(--cyan); filter: blur(0.5px); }
-        .w-head { width: 22px; height: 22px; border-radius: 50%; background: currentColor; margin: 0 auto 3px; }
-        .w-body { width: 32px; height: 42px; border-radius: 10px 10px 4px 4px; background: currentColor; margin: 0 auto; position: relative; }
-        .w-desk { width: 56px; height: 5px; border-radius: 3px; background: currentColor; margin: 2px auto 0; }
-        .w-monitor { width: 28px; height: 18px; border: 2px solid currentColor; border-radius: 2px; margin: 0 auto; position: relative; }
-        .w-monitor::after { content:''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); width: 8px; height: 5px; background: currentColor; }
-        .w-arm { position: absolute; width: 8px; height: 22px; border-radius: 4px; background: currentColor; transform-origin: top center; }
-        .w-arm-l { left: -4px; top: 8px; animation: armType 0.5s ease-in-out infinite; }
-        .w-arm-r { right: -4px; top: 8px; animation: armType 0.5s ease-in-out infinite 0.12s; }
-        @keyframes armType { 0%,100% { transform: rotate(-10deg); } 50% { transform: rotate(-22deg); } }
-        .w-standing .w-body { height: 55px; }
-        .w-standing .w-arm-l { top: 6px; animation: armPoint 3s ease-in-out infinite; }
-        .w-standing .w-arm-r { top: 6px; animation: armPoint 3s ease-in-out infinite 1.5s; }
-        .w-legs { display: flex; justify-content: center; gap: 5px; }
-        .w-leg { width: 10px; height: 32px; border-radius: 0 0 5px 5px; background: currentColor; }
-        .w-standing .w-leg:first-child { animation: legShift 2.5s ease-in-out infinite; }
-        .w-standing .w-leg:last-child { animation: legShift 2.5s ease-in-out infinite 1.25s; }
-        @keyframes armPoint { 0%,100% { transform: rotate(-3deg); } 50% { transform: rotate(8deg); } }
-        @keyframes legShift { 0%,100% { transform: translateX(0); } 50% { transform: translateX(3px); } }
-
-        /* ===== MAIN ===== */
-        .main-content { position: relative; z-index: 10; }
-        .hero {
-            min-height: 100vh; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; text-align: center;
-            padding: 2rem; position: relative;
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .hero-badge {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 0.4rem 1.2rem; background: rgba(0,229,255,0.08);
-            border: 1px solid rgba(0,229,255,0.2); border-radius: 50px;
-            font-size: 0.8rem; font-weight: 600; color: var(--cyan);
-            text-transform: uppercase; letter-spacing: 0.15em;
-            margin-bottom: 1.5rem; animation: fadeSlideDown 1s ease 0.2s both;
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
-        .hero-title {
-            font-size: clamp(2.8rem, 7vw, 5.5rem); font-weight: 900;
-            letter-spacing: -0.03em; line-height: 1.05;
-            background: linear-gradient(135deg, #fff 0%, var(--cyan) 40%, var(--teal) 80%, #80deea 100%);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            background-clip: text; animation: fadeSlideDown 1s ease 0.4s both;
+        
+        @keyframes pulse-glow {
+            0%, 100% {
+                box-shadow: 0 0 20px var(--accent-glow);
+            }
+            50% {
+                box-shadow: 0 0 40px var(--accent-glow), 0 0 60px var(--accent-glow);
+            }
         }
-        .hero-subtitle {
-            font-family: 'Outfit', sans-serif; font-size: clamp(0.95rem, 2.2vw, 1.3rem);
-            font-weight: 200; color: var(--teal); letter-spacing: 0.2em;
-            text-transform: uppercase; margin-top: 0.75rem;
-            animation: fadeSlideDown 1s ease 0.6s both;
+        
+        .name-title {
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--accent-primary), #ffffff, var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
         }
-        .contact-row {
-            display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
-            margin-top: 2.5rem; animation: fadeSlideDown 1s ease 0.8s both;
+        
+        .job-title {
+            font-size: clamp(1rem, 2.5vw, 1.4rem);
+            color: var(--accent-primary);
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
-        .contact-chip {
-            display: flex; align-items: center; gap: 0.5rem;
-            padding: 0.55rem 1.1rem; background: var(--glass);
-            border: 1px solid var(--card-border); border-radius: 50px;
-            backdrop-filter: blur(12px); font-size: 0.85rem;
-            color: rgba(224,247,250,0.85); transition: all 0.3s ease;
+        
+        /* Clock Section */
+        .clock-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.2s both;
+        }
+        
+        .clock-card {
+            padding: 1.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .clock-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .city-name {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .clock-time {
+            font-family: 'Space Grotesk', monospace;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+        }
+        
+        .clock-date {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+        
+        /* Translate Buttons */
+        .translate-section {
+            display: flex;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+        
+        .translate-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid var(--border-color);
+            background: transparent;
+            color: var(--text-primary);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .translate-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .translate-btn:hover::before {
+            left: 100%;
+        }
+        
+        .translate-btn:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 212, 255, 0.1);
+            transform: scale(1.05);
+        }
+        
+        .translate-btn.active {
+            background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+            border-color: var(--accent-primary);
+            color: var(--bg-deep);
+            animation: pulse-glow 2s infinite;
+        }
+        
+        /* Contact Buttons */
+        .contact-section {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.4s both;
+        }
+        
+        .contact-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 1.5rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
             text-decoration: none;
         }
-        .contact-chip:hover {
-            border-color: var(--cyan); background: rgba(0,229,255,0.08);
-            transform: translateY(-2px); color: var(--foam);
+        
+        .contact-btn svg {
+            width: 20px;
+            height: 20px;
         }
-        .contact-chip i { color: var(--cyan); font-size: 0.9rem; }
-
-        /* Chip salin telepon */
-        .contact-chip-copy { cursor: pointer; user-select: none; }
-        .contact-chip-copy .chip-label { position: relative; }
-        .contact-chip-copy .chip-label::after {
-            content: 'Klik untuk salin'; position: absolute; bottom: -18px; left: 50%;
-            transform: translateX(-50%); font-size: 0.6rem; color: rgba(0,229,255,0.5);
-            white-space: nowrap; opacity: 0; transition: opacity 0.25s; pointer-events: none;
+        
+        .btn-phone {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
         }
-        .contact-chip-copy:hover .chip-label::after { opacity: 1; }
-        .contact-chip-copy.copied { border-color: var(--teal) !important; background: rgba(0,191,165,0.12) !important; }
-        .contact-chip-copy.copied .chip-label::after { content: 'Tersalin!'; color: var(--teal); opacity: 1; }
-        .contact-chip-copy .chip-icon-wrap { position: relative; width: 16px; display: inline-flex; align-items: center; justify-content: center; }
-        .contact-chip-copy .chip-icon-check { position: absolute; color: var(--teal); opacity: 0; transform: scale(0.5); transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-        .contact-chip-copy.copied .chip-icon-check { opacity: 1; transform: scale(1); }
-        .contact-chip-copy.copied .chip-icon-phone { opacity: 0; transform: scale(0.5); }
-        .contact-chip-copy .chip-icon-phone { transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1); }
-
-        .scroll-hint {
-            position: absolute; bottom: 2rem; display: flex; flex-direction: column;
-            align-items: center; gap: 0.5rem; animation: hintBounce 2.5s ease-in-out infinite;
-            color: rgba(0,229,255,0.4); font-size: 0.75rem; letter-spacing: 0.1em;
+        
+        .btn-linkedin {
+            background: linear-gradient(135deg, #0077b5, #005582);
+            color: white;
         }
-        @keyframes hintBounce { 0%,100% { transform: translateY(0); opacity: 0.4; } 50% { transform: translateY(8px); opacity: 0.8; } }
-        @keyframes fadeSlideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .section-heading {
-            font-family: 'Outfit', sans-serif; font-size: 1.1rem; font-weight: 600;
-            color: var(--teal); text-transform: uppercase; letter-spacing: 0.12em;
-            text-align: center; margin-bottom: 2rem; position: relative;
+        
+        .btn-email {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
         }
-        .section-heading::after { content:''; display: block; width: 40px; height: 2px; background: var(--cyan); margin: 0.6rem auto 0; border-radius: 2px; }
-
-        /* ===== JAM ===== */
-        .clock-section { padding: 3rem 1rem; }
-        .clock-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; max-width: 860px; margin: 0 auto; }
-        .clock-card {
-            background: var(--card); border: 1px solid var(--card-border);
-            border-radius: 18px; padding: 1.5rem 1rem; text-align: center;
-            backdrop-filter: blur(14px); transition: all 0.4s cubic-bezier(0.25,0.46,0.45,0.94);
-            position: relative; overflow: hidden;
+        
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
-        .clock-card::before { content:''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); opacity: 0.6; }
-        .clock-card:hover { transform: translateY(-6px) scale(1.03); border-color: rgba(0,229,255,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.35), 0 0 40px rgba(0,229,255,0.06); }
-        .clock-flag { font-size: 1.6rem; margin-bottom: 0.4rem; }
-        .clock-label { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.8rem; color: var(--teal); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.6rem; }
-        .clock-time { font-family: 'Outfit', sans-serif; font-size: clamp(1.8rem,4vw,2.6rem); font-weight: 800; color: var(--foam); line-height: 1.1; }
-        .clock-sec { font-size: 1rem; color: var(--cyan); font-weight: 400; }
-        .clock-date { font-size: 0.78rem; color: rgba(224,247,250,0.4); margin-top: 0.35rem; }
-
-        /* ===== TRANSLATE ===== */
-        .translate-section { padding: 1.5rem 1rem 3rem; }
-        .translate-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; max-width: 820px; margin: 0 auto; }
-        .trans-btn {
-            display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-            padding: 1.2rem 0.5rem; border-radius: 16px; border: 1px solid var(--card-border);
-            background: var(--card); color: var(--foam); font-family: 'Outfit', sans-serif;
-            font-size: 0.82rem; font-weight: 600; cursor: pointer; backdrop-filter: blur(10px);
-            transition: all 0.35s cubic-bezier(0.25,0.46,0.45,0.94); text-decoration: none;
-            position: relative; overflow: hidden;
-        }
-        .trans-btn::after { content:''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 120%, rgba(0,229,255,0.12), transparent 70%); opacity: 0; transition: opacity 0.3s; }
-        .trans-btn:hover::after { opacity: 1; }
-        .trans-btn:hover { border-color: var(--cyan); transform: translateY(-4px); box-shadow: 0 12px 35px rgba(0,0,0,0.3), 0 0 25px rgba(0,229,255,0.08); }
-        .trans-btn.active { border-color: var(--teal) !important; background: rgba(0,191,165,0.12) !important; }
-        .trans-btn .flag-icon { font-size: 2rem; position: relative; z-index: 1; }
-        .trans-btn .lang-name { position: relative; z-index: 1; }
-        .trans-btn .lang-sub { font-size: 0.65rem; font-weight: 300; color: rgba(224,247,250,0.4); position: relative; z-index: 1; }
-        .trans-btn .active-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); position: relative; z-index: 1; opacity: 0; transition: opacity 0.3s; }
-        .trans-btn.active .active-dot { opacity: 1; }
-
-        /* ===== CV CARDS ===== */
-        .cv-wrap { max-width: 880px; margin: 0 auto; padding: 0 1rem 5rem; }
-        .cv-card {
-            background: var(--card); border: 1px solid var(--card-border);
-            border-radius: 20px; padding: 2rem; margin-bottom: 1.5rem;
-            backdrop-filter: blur(14px); transition: all 0.45s cubic-bezier(0.25,0.46,0.45,0.94);
-            opacity: 0; transform: translateY(30px);
-        }
-        .cv-card.visible { opacity: 1; transform: translateY(0); }
-        .cv-card:hover { border-color: rgba(0,229,255,0.22); box-shadow: 0 25px 60px rgba(0,0,0,0.3), 0 0 50px rgba(0,229,255,0.04); }
-        .card-title {
-            font-family: 'Outfit', sans-serif; font-size: 1.35rem; font-weight: 800;
-            color: var(--cyan); margin-bottom: 1.2rem; padding-bottom: 0.7rem;
-            border-bottom: 2px solid rgba(0,229,255,0.12); display: flex; align-items: center; gap: 0.65rem;
-        }
-        .card-title i { font-size: 1rem; opacity: 0.6; }
-        .sub-label { font-family: 'Outfit', sans-serif; font-size: 0.78rem; font-weight: 600; color: var(--teal); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.6rem; margin-top: 1.2rem; }
-        .sub-label:first-of-type { margin-top: 0; }
-        .item-title { font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 1rem; color: var(--foam); margin-bottom: 0.15rem; }
-        .item-meta { font-size: 0.82rem; color: var(--teal); margin-bottom: 0.15rem; }
-        .item-detail { font-size: 0.82rem; color: rgba(224,247,250,0.45); margin-bottom: 0.1rem; }
-        .bullet { padding-left: 1.2rem; position: relative; font-size: 0.9rem; color: rgba(224,247,250,0.72); line-height: 1.75; }
-        .bullet::before { content: '\25B8'; position: absolute; left: 0; color: var(--cyan); font-size: 0.75rem; }
-        .profile-text { font-size: 0.95rem; color: rgba(224,247,250,0.78); line-height: 1.8; }
-        .skill-pills { display: flex; flex-wrap: wrap; gap: 0.45rem; }
-        .skill-pill {
-            padding: 0.35rem 0.75rem; background: rgba(0,229,255,0.05);
-            border: 1px solid rgba(0,229,255,0.08); border-radius: 8px;
-            font-size: 0.82rem; color: rgba(224,247,250,0.85); transition: all 0.3s;
-        }
-        .skill-pill:hover { background: rgba(0,229,255,0.12); border-color: rgba(0,229,255,0.22); color: var(--foam); }
-        .lang-line { font-size: 0.92rem; color: rgba(224,247,250,0.78); line-height: 1.8; }
-
-        /* ===== OVERLAY TRANSLATE ===== */
-        .translate-overlay {
-            position: fixed; inset: 0; z-index: 9000;
-            background: rgba(3,11,24,0.85); backdrop-filter: blur(8px);
-            display: flex; align-items: center; justify-content: center;
-            opacity: 0; pointer-events: none; transition: opacity 0.3s;
-        }
-        .translate-overlay.show { opacity: 1; pointer-events: auto; }
-        .translate-modal {
-            background: var(--ocean-dark); border: 1px solid var(--card-border);
-            border-radius: 20px; padding: 2rem; max-width: 400px; width: 90%;
-            text-align: center; transform: scale(0.9); transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
-        }
-        .translate-overlay.show .translate-modal { transform: scale(1); }
-        .translate-modal .spinner {
-            width: 36px; height: 36px; border: 3px solid rgba(0,229,255,0.15);
-            border-top-color: var(--cyan); border-radius: 50%;
-            animation: spin 0.8s linear infinite; margin: 0 auto 1rem;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .translate-modal p { color: var(--foam); font-size: 0.95rem; }
-
-        /* Toast */
+        
         .toast {
-            position: fixed; bottom: 2rem; left: 50%;
-            transform: translateX(-50%) translateY(120px);
-            background: var(--ocean-mid); border: 1px solid var(--cyan);
-            color: var(--foam); padding: 0.7rem 1.5rem; border-radius: 12px;
-            font-size: 0.88rem; z-index: 9999; backdrop-filter: blur(12px);
-            transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
-            pointer-events: none; white-space: nowrap;
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            font-weight: 500;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .toast.show { transform: translateX(-50%) translateY(0); }
-
-        .footer-line { text-align: center; padding: 2rem 1rem; font-size: 0.75rem; color: rgba(224,247,250,0.25); position: relative; z-index: 10; }
-
+        
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+        
+        /* CV Content */
+        .cv-section {
+            animation: fadeInUp 1s ease-out 0.5s both;
+        }
+        
+        .section-card {
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        
+        .section-title svg {
+            width: 24px;
+            height: 24px;
+        }
+        
+        .profile-text {
+            line-height: 1.8;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+        
+        .education-item, .experience-item, .project-item, .org-item {
+            margin-bottom: 1.5rem;
+            padding-left: 1rem;
+            border-left: 3px solid var(--accent-secondary);
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .item-title {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+        
+        .item-subtitle {
+            color: var(--accent-primary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .item-date {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            background: rgba(0, 180, 216, 0.15);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+        
+        .item-list {
+            list-style: none;
+            margin-top: 0.75rem;
+        }
+        
+        .item-list li {
+            position: relative;
+            padding-left: 1.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+        
+        .item-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.6rem;
+            width: 6px;
+            height: 6px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+        }
+        
+        .cert-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .cert-item svg {
+            width: 16px;
+            height: 16px;
+            color: var(--accent-primary);
+            flex-shrink: 0;
+            margin-top: 0.2rem;
+        }
+        
+        /* Skills */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .skill-category h4 {
+            font-size: 0.9rem;
+            color: var(--accent-primary);
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .skill-tag {
+            background: rgba(0, 180, 216, 0.15);
+            color: var(--text-primary);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .skill-tag:hover {
+            background: rgba(0, 212, 255, 0.25);
+            border-color: var(--accent-primary);
+        }
+        
+        /* Languages */
+        .languages-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .lang-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+        
+        .lang-item::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+        }
+        
+        /* Responsive */
         @media (max-width: 768px) {
-            .clock-grid { grid-template-columns: 1fr; max-width: 320px; }
-            .translate-grid { grid-template-columns: repeat(2,1fr); }
-            .cv-card { padding: 1.3rem; border-radius: 14px; }
-            .worker-group { display: none; }
+            .main-content {
+                padding: 1rem;
+            }
+            
+            .section-card {
+                padding: 1.25rem;
+            }
+            
+            .item-header {
+                flex-direction: column;
+            }
+            
+            .translate-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.8rem;
+            }
+            
+            .contact-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+            }
         }
-        @media (max-width: 480px) {
-            .translate-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+        
+        /* Scroll reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 <body>
-
-    <!-- Overlay loading translate -->
-    <div class="translate-overlay" id="translateOverlay">
-        <div class="translate-modal">
-            <div class="spinner"></div>
-            <p id="translateStatusText">Menerjemahkan halaman...</p>
-        </div>
-    </div>
-
-    <!-- ===== BACKGROUND LAUT 3D ===== -->
-    <div class="ocean-bg" id="oceanBg" aria-hidden="true">
-        <div class="ocean-gradient"></div>
-        <div class="light-ray"></div>
-        <div class="light-ray"></div>
-        <div class="light-ray"></div>
-        <div class="light-ray"></div>
-        <div id="bubblesContainer"></div>
-        <div class="worker-group wg-1">
-            <div class="worker"><div class="w-head"></div><div class="w-body"><div class="w-arm w-arm-l"></div><div class="w-arm w-arm-r"></div></div><div class="w-monitor"></div><div class="w-desk"></div></div>
-        </div>
-        <div class="worker-group wg-2">
-            <div class="worker"><div class="w-head"></div><div class="w-body"><div class="w-arm w-arm-l"></div><div class="w-arm w-arm-r"></div></div><div class="w-monitor"></div><div class="w-desk"></div></div>
-        </div>
-        <div class="worker-group wg-3">
-            <div class="worker w-standing"><div class="w-head"></div><div class="w-body"><div class="w-arm w-arm-l"></div><div class="w-arm w-arm-r"></div></div><div class="w-legs"><div class="w-leg"></div><div class="w-leg"></div></div></div>
-        </div>
-        <div class="waves-wrap">
-            <div class="wave-layer"><svg viewBox="0 0 2880 180" preserveAspectRatio="none" style="width:100%;height:100%;display:block;"><path d="M0,120 C360,180 720,60 1080,120 C1440,180 1800,60 2160,120 C2520,180 2880,60 2880,120 L2880,180 L0,180 Z" fill="rgba(0,229,255,0.06)"/></svg></div>
-            <div class="wave-layer"><svg viewBox="0 0 2880 180" preserveAspectRatio="none" style="width:100%;height:100%;display:block;"><path d="M0,140 C480,80 960,170 1440,110 C1920,50 2400,160 2880,100 L2880,180 L0,180 Z" fill="rgba(0,191,165,0.05)"/></svg></div>
-            <div class="wave-layer"><svg viewBox="0 0 2880 180" preserveAspectRatio="none" style="width:100%;height:100%;display:block;"><path d="M0,150 C320,100 640,170 960,130 C1280,90 1600,160 1920,120 C2240,80 2560,150 2880,110 L2880,180 L0,180 Z" fill="rgba(19,81,143,0.07)"/></svg></div>
-        </div>
-    </div>
-
-    <!-- ===== KONTEN UTAMA ===== -->
-    <main class="main-content" id="mainContent">
-
-        <section class="hero" id="heroSection">
-            <div class="hero-badge"><i class="fas fa-bolt"></i> <span data-t>Curriculum Vitae</span></div>
-            <h1 class="hero-title">Ridwan Sasmita</h1>
-            <p class="hero-subtitle"><span data-t>Electrical Engineering / Telecommunication Engineer</span></p>
-            <div class="contact-row">
-                <a href="mailto:ridwansasm14@gmail.com" class="contact-chip" aria-label="Kirim email ke ridwansasm14@gmail.com">
-                    <i class="fas fa-envelope"></i>
-                    <span>ridwansasm14@gmail.com</span>
-                </a>
-                <div class="contact-chip contact-chip-copy" id="phoneChip" onclick="copyPhone()" role="button" tabindex="0" aria-label="Salin nomor telepon 081226834082">
-                    <span class="chip-icon-wrap">
-                        <i class="fas fa-phone chip-icon-phone"></i>
-                        <i class="fas fa-check chip-icon-check"></i>
-                    </span>
-                    <span class="chip-label">081226834082</span>
-                </div>
-                <a href="https://www.linkedin.com/in/ridwansasm14" target="_blank" rel="noopener noreferrer" class="contact-chip" aria-label="Buka profil LinkedIn">
-                    <i class="fab fa-linkedin"></i>
-                    <span>linkedin.com/in/ridwansasm14</span>
-                </a>
+    <div id="canvas-container"></div>
+    
+    <main class="main-content">
+        <!-- Header -->
+        <header class="header-section">
+            <h1 class="name-title" data-translate="name">RIDWAN SASMITA</h1>
+            <p class="job-title" data-translate="job_title">Electrical Engineering / Telecommunication Engineer</p>
+        </header>
+        
+        <!-- Real-time Clocks -->
+        <section class="clock-section">
+            <div class="glass-card clock-card">
+                <div class="city-name" data-translate="jakarta">Jakarta (Indonesia)</div>
+                <div class="clock-time" id="clock-jakarta">--:--:--</div>
+                <div class="clock-date" id="date-jakarta">--</div>
             </div>
-            <div class="scroll-hint"><span>SCROLL</span><i class="fas fa-chevron-down"></i></div>
-        </section>
-
-        <!-- JAM -->
-        <section class="clock-section" aria-label="Jam Realtime">
-            <div class="section-heading">Realtime World Clock</div>
-            <div class="clock-grid">
-                <div class="clock-card">
-                    <div class="clock-flag">🇮🇩</div>
-                    <div class="clock-label">Jakarta (WIB)</div>
-                    <div class="clock-time" id="timeJakarta">--:--<span class="clock-sec">:--</span></div>
-                    <div class="clock-date" id="dateJakarta">---</div>
-                </div>
-                <div class="clock-card">
-                    <div class="clock-flag">🇯🇵</div>
-                    <div class="clock-label">Tokyo (JST)</div>
-                    <div class="clock-time" id="timeTokyo">--:--<span class="clock-sec">:--</span></div>
-                    <div class="clock-date" id="dateTokyo">---</div>
-                </div>
-                <div class="clock-card">
-                    <div class="clock-flag">🇩🇪</div>
-                    <div class="clock-label">Berlin (CET)</div>
-                    <div class="clock-time" id="timeBerlin">--:--<span class="clock-sec">:--</span></div>
-                    <div class="clock-date" id="dateBerlin">---</div>
-                </div>
+            <div class="glass-card clock-card">
+                <div class="city-name" data-translate="tokyo">Tokyo (Japan)</div>
+                <div class="clock-time" id="clock-tokyo">--:--:--</div>
+                <div class="clock-date" id="date-tokyo">--</div>
+            </div>
+            <div class="glass-card clock-card">
+                <div class="city-name" data-translate="berlin">Berlin (Germany)</div>
+                <div class="clock-time" id="clock-berlin">--:--:--</div>
+                <div class="clock-date" id="date-berlin">--</div>
             </div>
         </section>
-
-        <!-- TRANSLATE -->
-        <section class="translate-section" aria-label="Terjemahkan halaman">
-            <div class="section-heading"><span data-t>Translate Page</span></div>
-            <div class="translate-grid">
-                <button class="trans-btn active" id="btnId" onclick="translatePage('id')" aria-label="Terjemahkan ke Bahasa Indonesia">
-                    <span class="flag-icon">🇮🇩</span>
-                    <span class="lang-name">Indonesia</span>
-                    <span class="lang-sub"><span data-t>Terjemahkan</span></span>
-                    <span class="active-dot"></span>
-                </button>
-                <button class="trans-btn" id="btnEn" onclick="translatePage('en')" aria-label="Translate to English">
-                    <span class="flag-icon">🇬🇧</span>
-                    <span class="lang-name">English</span>
-                    <span class="lang-sub">Translate</span>
-                    <span class="active-dot"></span>
-                </button>
-                <button class="trans-btn" id="btnJa" onclick="translatePage('ja')" aria-label="翻訳 日本語">
-                    <span class="flag-icon">🇯🇵</span>
-                    <span class="lang-name">日本語</span>
-                    <span class="lang-sub">翻訳</span>
-                    <span class="active-dot"></span>
-                </button>
-                <button class="trans-btn" id="btnDe" onclick="translatePage('de')" aria-label="Übersetzen Deutsch">
-                    <span class="flag-icon">🇩🇪</span>
-                    <span class="lang-name">Deutsch</span>
-                    <span class="lang-sub">Übersetzen</span>
-                    <span class="active-dot"></span>
-                </button>
-            </div>
+        
+        <!-- Translate Buttons -->
+        <section class="translate-section">
+            <button class="translate-btn active" data-lang="id" aria-label="Translate to Indonesian">Indonesia</button>
+            <button class="translate-btn" data-lang="en" aria-label="Translate to English">English</button>
+            <button class="translate-btn" data-lang="ja" aria-label="Translate to Japanese">日本語</button>
+            <button class="translate-btn" data-lang="de" aria-label="Translate to German">Deutsch</button>
         </section>
-
-        <!-- ISI CV -->
-        <div class="cv-wrap">
-            <article class="cv-card" data-reveal>
-                <div class="card-title"><i class="fas fa-user-circle"></i> <span data-t>PROFILE SUMMARY</span></div>
-                <p class="profile-text" data-t>Graduated with a Bachelor of Electrical Engineering majoring in Telecommunication from Gunadarma University. I interested and enthusiastic about IT solutions and engineering because I have experience in installation, configuration, troubleshooting, and maintenance of fiber optic networks, and have been involved in several network development and expansion projects from the planning stage to implementation. I also have a background in electrical engineering, with a strong understanding of electrical systems and the fundamentals of communication networks that support technical and operational performance in the field.</p>
+        
+        <!-- Contact Buttons -->
+        <section class="contact-section">
+            <button class="contact-btn btn-phone" id="btn-phone" aria-label="Copy phone number">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                <span data-translate="copy_phone">Salin Nomor</span>
+            </button>
+            <a href="https://www.linkedin.com/in/ridwansasm14" target="_blank" rel="noopener noreferrer" class="contact-btn btn-linkedin" aria-label="Open LinkedIn profile">
+                <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                </svg>
+                LinkedIn
+            </a>
+            <a href="mailto:ridwansasm14@gmail.com" class="contact-btn btn-email" aria-label="Send email">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <span data-translate="send_email">Kirim Email</span>
+            </a>
+        </section>
+        
+        <!-- Toast notification -->
+        <div class="toast" id="toast" role="alert"></div>
+        
+        <!-- CV Content -->
+        <div class="cv-section">
+            <!-- Profile Summary -->
+            <article class="glass-card section-card reveal">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <span data-translate="profile_title">PROFILE SUMMARY</span>
+                </h2>
+                <p class="profile-text" data-translate="profile_text">Graduated with a Bachelor of Electrical Engineering majoring in Telecommunication from Gunadarma University. I interested and enthusiastic about IT solutions and engineering because I have experience in installation, configuration, troubleshooting, and maintenance of fiber optic networks, and have been involved in several network development and expansion projects from the planning stage to implementation. I also have a background in electrical engineering, with a strong understanding of electrical systems and the fundamentals of communication networks that support technical and operational performance in the field.</p>
             </article>
-
-            <article class="cv-card" data-reveal>
-                <div class="card-title"><i class="fas fa-graduation-cap"></i> <span data-t>EDUCATION</span></div>
-                <div class="sub-label">SMAN 17 JAKARTA – WEST JAKARTA</div>
-                <div class="item-meta">14 Jul 2016 – 2 Mei 2019</div>
-                <div class="item-detail" data-t>Major: Departement of Natural Science</div>
-                <div class="bullet" data-t>Participation in science practicum</div>
-                <div class="bullet" data-t>Handling Tools and creating the final report structure for science practicums</div>
-                <div class="sub-label" style="margin-top:1.5rem;">Gunadarma University – Depok, WEST JAVA</div>
-                <div class="item-meta">28 Sep 2020 – 30 Aug 2024</div>
-                <div class="item-detail" data-t>Major: Bachelor Degree of Electrical Engineering in field Telecommunications</div>
-                <div class="bullet" data-t>Participation in electrical engineering practicums and use of MATLAB software each semester</div>
-                <div class="bullet" data-t>Joined Organizational Electrical Engineering Student Association from August 2021 to September 2022</div>
-                <div class="item-detail" style="margin-top:0.6rem;" data-t>Certification & Training:</div>
-                <div class="bullet" data-t>Design of Low Voltage Utilization Installations by Badan Nasional Sertifikasi Profesi (BNSP)</div>
-                <div class="bullet" data-t>Analog Electronic Circuit Design with LTSpice software by Gunadarma University</div>
-            </article>
-
-            <article class="cv-card" data-reveal>
-                <div class="card-title"><i class="fas fa-briefcase"></i> <span data-t>EXPERIENCE</span></div>
-                <div class="sub-label">(Internship) PT. Telkom Indonesia Tbk. – DEPOK, WEST JAVA</div>
-                <div class="item-meta">11 Sep 2023 – 11 Dec 2023</div>
-                <div class="item-detail" data-t>Position: Optical Fibre Technician & Monitoring</div>
-                <div class="bullet" data-t>New fibre optic installations for customers in every home</div>
-                <div class="bullet" data-t>Handling maintenances on problem customers</div>
-                <div class="bullet" data-t>Monitoring fiber optic attenuation in customers</div>
-                <div class="sub-label" style="margin-top:1.5rem;">PT. Linknet Tbk. – SOUTH JAKARTA</div>
-                <div class="item-meta">08 Jul 2025 – <span data-t>Now</span></div>
-                <div class="item-detail" data-t>Position: Corporate Helpdesk</div>
-                <div class="bullet" data-t>Monitoring Network Operation Center</div>
-                <div class="bullet" data-t>Performing ticketing, monitoring, and escalating customer service issues</div>
-                <div class="bullet" data-t>Troubleshooting customer internet distruptions</div>
-            </article>
-
-            <article class="cv-card" data-reveal>
-                <div class="card-title"><i class="fas fa-project-diagram"></i> <span data-t>PROJECT</span></div>
-                <div class="item-title">PT. TELKOMSEL-Migration Services (Vlan) DC ITDC TBS from FortiGate firewall to Palo Alto firewall</div>
-                <div class="item-meta">20 Nov 2024 – 21 Nov 2024</div>
-                <div class="item-title" style="margin-top:1rem;">PT. TELKOMSEL-Migration Services (Vlan) DC ITDC BSD from FortiGate firewall to Palo Alto firewall</div>
-                <div class="item-meta">08 Feb 2025 – 09 Feb 2025</div>
-                <div class="item-detail" style="margin-top:1rem;" data-t>Position: Project Engineer</div>
-                <div class="bullet" data-t>IP Centre / Vlan data migration Fortigate from Firewall to Palo Alto Firewall using Palo Alto and Putty/ SecureCRT SSH software</div>
-                <div class="bullet" data-t>IP Centre / Vlan Monitoring</div>
-                <div class="bullet" data-t>Troubleshooting IP Centre / Vlan Maintenance</div>
-                <div class="bullet" data-t>Problematic IP data centre analysis using google spreadsheets and Palo Alto Software</div>
-            </article>
-
-            <article class="cv-card" data-reveal>
-                <div class="card-title"><i class="fas fa-users"></i> <span data-t>ORGANIZATION EXPERIENCE</span></div>
-                <div class="sub-label" data-t>Gunadarma University Electrical Student Association</div>
-                <div class="item-meta">21 Aug 2021 – 27 Sep 2022</div>
-                <div class="item-detail" data-t>Division: Head of Media Information Division</div>
-                <div class="bullet" data-t>Create a big day designs and post on social media</div>
-                <div class="bullet" data-t>Create project design images on set events</div>
-                <div class="bullet" data-t>Reporting the division's performance at the end of each month at meetings</div>
-            </article>
-
-            <article class="cv-card" data-reveal>
-                <div class="card-title"><i class="fas fa-cogs"></i> <span data-t>SKILL</span></div>
-                <div class="sub-label" data-t>Soft Skill</div>
-                <div class="skill-pills" style="margin-bottom:1.2rem;">
-                    <span class="skill-pill" data-t>ADAPTATION</span>
-                    <span class="skill-pill" data-t>TIME MANAGEMENT</span>
-                    <span class="skill-pill" data-t>CRITICAL THINKING</span>
-                    <span class="skill-pill" data-t>COMMUNICATION</span>
-                    <span class="skill-pill" data-t>GOOD PROBLEM-SOLVING SKILL</span>
-                    <span class="skill-pill" data-t>ABILITY TO HANDLE PRESSURE</span>
+            
+            <!-- Education -->
+            <article class="glass-card section-card reveal">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                        <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                    </svg>
+                    <span data-translate="education_title">EDUCATION</span>
+                </h2>
+                
+                <div class="education-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title" data-translate="edu1_name">SMAN 17 JAKARTA – WEST JAKARTA</div>
+                            <div class="item-subtitle" data-translate="edu1_major">Major: Department of Natural Science</div>
+                        </div>
+                        <span class="item-date">14 Jul 2016 – 2 May 2019</span>
+                    </div>
+                    <ul class="item-list">
+                        <li data-translate="edu1_item1">Participation in science practicum</li>
+                        <li data-translate="edu1_item2">Handling Tools and creating the final report structure for science practicums</li>
+                    </ul>
                 </div>
-                <div class="sub-label" data-t>Hard Skill</div>
-                <div class="skill-pills">
-                    <span class="skill-pill">Microsoft Office 365</span>
-                    <span class="skill-pill">Microsoft Visio / drawio</span>
-                    <span class="skill-pill" data-t>Amplitudo Modulation</span>
-                    <span class="skill-pill">Google Spreadsheets/Slides/Docs</span>
-                    <span class="skill-pill" data-t>Frequency Modulation</span>
-                    <span class="skill-pill">Matlab</span>
-                    <span class="skill-pill">Secure CRT SSH</span>
-                    <span class="skill-pill" data-t>Fiber Optic</span>
-                    <span class="skill-pill">Proteus Professional</span>
-                    <span class="skill-pill">Arduino IDE</span>
-                    <span class="skill-pill">LAN / WAN</span>
-                    <span class="skill-pill" data-t>Cacti (Monitoring Graph Network)</span>
+                
+                <div class="education-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title" data-translate="edu2_name">Gunadarma University – Depok, WEST JAVA</div>
+                            <div class="item-subtitle" data-translate="edu2_major">Major: Bachelor Degree of Electrical Engineering in field Telecommunications</div>
+                        </div>
+                        <span class="item-date">28 Sep 2020 – 30 Aug 2024</span>
+                    </div>
+                    <ul class="item-list">
+                        <li data-translate="edu2_item1">Participation in electrical engineering practicums and use of MATLAB software each semester</li>
+                        <li data-translate="edu2_item2">Joined Organizational Electrical Engineering Student Association from August 2021 to September 2022</li>
+                    </ul>
+                    <h4 style="color: var(--accent-primary); margin: 1rem 0 0.5rem; font-size: 0.9rem;" data-translate="cert_title">Certification & Training:</h4>
+                    <div class="cert-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <span data-translate="cert1">Design of Low Voltage Utilization Installations by Badan Nasional Sertifikasi Profesi (BNSP)</span>
+                    </div>
+                    <div class="cert-item">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <span data-translate="cert2">Analog Electronic Circuit Design with LTSpice software by Gunadarma University</span>
+                    </div>
                 </div>
             </article>
-
-            <article class="cv-card" data-reveal>
-                <div class="card-title"><i class="fas fa-language"></i> <span data-t>LANGUAGES</span></div>
-                <div class="lang-line" data-t>1. English (Written)</div>
-                <div class="lang-line" data-t>2. Indonesia (Intermediate)</div>
+            
+            <!-- Experience -->
+            <article class="glass-card section-card reveal">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                    <span data-translate="experience_title">EXPERIENCE</span>
+                </h2>
+                
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title" data-translate="exp1_company">(Internship) PT. Telkom Indonesia Tbk. – DEPOK, WEST JAVA</div>
+                            <div class="item-subtitle" data-translate="exp1_position">Position: Optical Fibre Technician & Monitoring</div>
+                        </div>
+                        <span class="item-date">11 Sep 2023 – 11 Dec 2023</span>
+                    </div>
+                    <ul class="item-list">
+                        <li data-translate="exp1_item1">New fibre optic installations for customers in every home</li>
+                        <li data-translate="exp1_item2">Handling maintenances on problem customers</li>
+                        <li data-translate="exp1_item3">Monitoring fiber optic attenuation in customers</li>
+                    </ul>
+                </div>
+                
+                <div class="experience-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title" data-translate="exp2_company">PT. Linknet Tbk. – SOUTH JAKARTA</div>
+                            <div class="item-subtitle" data-translate="exp2_position">Position: Corporate Helpdesk</div>
+                        </div>
+                        <span class="item-date">08 Jul 2025 – Now</span>
+                    </div>
+                    <ul class="item-list">
+                        <li data-translate="exp2_item1">Monitoring Network Operation Center</li>
+                        <li data-translate="exp2_item2">Performing ticketing, monitoring, and escalating customer service issues</li>
+                        <li data-translate="exp2_item3">Troubleshooting customer internet disruptions</li>
+                    </ul>
+                </div>
+            </article>
+            
+            <!-- Projects -->
+            <article class="glass-card section-card reveal">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    <span data-translate="project_title">PROJECT</span>
+                </h2>
+                
+                <div class="project-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title" data-translate="proj1_name">PT. TELKOMSEL – Migration Services (Vlan) DC ITDC TBS from FortiGate firewall to Palo Alto firewall</div>
+                            <div class="item-subtitle" data-translate="proj_position">Position: Project Engineer</div>
+                        </div>
+                        <span class="item-date">20 Nov 2024 – 21 Nov 2024</span>
+                    </div>
+                </div>
+                
+                <div class="project-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title" data-translate="proj2_name">PT. TELKOMSEL – Migration Services (Vlan) DC ITDC BSD from FortiGate firewall to Palo Alto firewall</div>
+                            <div class="item-subtitle" data-translate="proj_position">Position: Project Engineer</div>
+                        </div>
+                        <span class="item-date">08 Feb 2025 – 09 Feb 2025</span>
+                    </div>
+                    <ul class="item-list">
+                        <li data-translate="proj_item1">IP Centre / Vlan data migration Fortigate from Firewall to Palo Alto Firewall using Palo Alto and Putty/ SecureCRT SSH software</li>
+                        <li data-translate="proj_item2">IP Centre / Vlan Monitoring</li>
+                        <li data-translate="proj_item3">Troubleshooting IP Centre / Vlan Maintenance</li>
+                        <li data-translate="proj_item4">Problematic IP data centre analysis using google spreadsheets and Palo Alto Software</li>
+                    </ul>
+                </div>
+            </article>
+            
+            <!-- Organization -->
+            <article class="glass-card section-card reveal">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <span data-translate="org_title">ORGANIZATION EXPERIENCE</span>
+                </h2>
+                
+                <div class="org-item">
+                    <div class="item-header">
+                        <div>
+                            <div class="item-title" data-translate="org_name">Gunadarma University Electrical Student Association</div>
+                            <div class="item-subtitle" data-translate="org_division">Division: Head of Media Information Division</div>
+                        </div>
+                        <span class="item-date">21 Aug 2021 – 27 Sep 2022</span>
+                    </div>
+                    <ul class="item-list">
+                        <li data-translate="org_item1">Create a big day designs and post on social media</li>
+                        <li data-translate="org_item2">Create project design images on set events</li>
+                        <li data-translate="org_item3">Reporting the division's performance at the end of each month at meetings</li>
+                    </ul>
+                </div>
+            </article>
+            
+            <!-- Skills -->
+            <article class="glass-card section-card reveal">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+                        <polyline points="2 17 12 22 22 17"/>
+                        <polyline points="2 12 12 17 22 12"/>
+                    </svg>
+                    <span data-translate="skill_title">SKILL</span>
+                </h2>
+                
+                <div class="skills-grid">
+                    <div class="skill-category">
+                        <h4 data-translate="soft_skill">SOFT SKILL</h4>
+                        <div class="skill-tags">
+                            <span class="skill-tag">ADAPTATION</span>
+                            <span class="skill-tag">TIME MANAGEMENT</span>
+                            <span class="skill-tag">CRITICAL THINKING</span>
+                            <span class="skill-tag">COMMUNICATION</span>
+                            <span class="skill-tag" data-translate="skill_problem">GOOD PROBLEM-SOLVING SKILL</span>
+                            <span class="skill-tag" data-translate="skill_pressure">ABILITY TO HANDLE PRESSURE</span>
+                        </div>
+                    </div>
+                    <div class="skill-category">
+                        <h4 data-translate="hard_skill">HARD SKILL</h4>
+                        <div class="skill-tags">
+                            <span class="skill-tag">Microsoft Office 365</span>
+                            <span class="skill-tag">Microsoft Visio / drawio</span>
+                            <span class="skill-tag" data-translate="skill_modulation">Amplitude Modulation</span>
+                            <span class="skill-tag">Google Spreadsheets/Slides/Docs</span>
+                            <span class="skill-tag" data-translate="skill_fm">Frequency Modulation</span>
+                            <span class="skill-tag">Matlab</span>
+                            <span class="skill-tag">Secure CRT SSH</span>
+                            <span class="skill-tag" data-translate="skill_fiber">Fiber Optic</span>
+                            <span class="skill-tag">LAN / WAN</span>
+                            <span class="skill-tag">Arduino IDE</span>
+                            <span class="skill-tag">Proteus Professional</span>
+                            <span class="skill-tag" data-translate="skill_cacti">Cacti (Monitoring Graph Network)</span>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            
+            <!-- Languages -->
+            <article class="glass-card section-card reveal">
+                <h2 class="section-title">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    <span data-translate="lang_title">LANGUAGES</span>
+                </h2>
+                <div class="languages-list">
+                    <div class="lang-item">
+                        <span data-translate="lang1">1. English (Written)</span>
+                    </div>
+                    <div class="lang-item">
+                        <span data-translate="lang2">2. Indonesia (Intermediate)</span>
+                    </div>
+                </div>
             </article>
         </div>
-
-        <footer class="footer-line">Ridwan Sasmita — Curriculum Vitae</footer>
+        
+        <!-- Footer -->
+        <footer style="text-align: center; padding: 2rem 0; color: var(--text-secondary); font-size: 0.85rem;">
+            <p data-translate="footer">Curriculum Vitae - Ridwan Sasmita</p>
+        </footer>
     </main>
-
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-    <script>
-        /* ===== SALIN NOMOR TELEPON ===== */
-        const phoneChip = document.getElementById('phoneChip');
-        let copyTimeout = null;
-
-        function copyPhone() {
-            const number = '081226834082';
-            navigator.clipboard.writeText(number).then(() => {
-                phoneChip.classList.add('copied');
-                showToast('Nomor ' + number + ' berhasil disalin!');
-                if (copyTimeout) clearTimeout(copyTimeout);
-                copyTimeout = setTimeout(() => phoneChip.classList.remove('copied'), 2200);
-            }).catch(() => {
-                const ta = document.createElement('textarea');
-                ta.value = number; ta.style.position = 'fixed'; ta.style.left = '-9999px';
-                document.body.appendChild(ta); ta.select();
-                try {
-                    document.execCommand('copy');
-                    phoneChip.classList.add('copied');
-                    showToast('Nomor ' + number + ' berhasil disalin!');
-                    if (copyTimeout) clearTimeout(copyTimeout);
-                    copyTimeout = setTimeout(() => phoneChip.classList.remove('copied'), 2200);
-                } catch (e) { showToast('Gagal menyalin nomor'); }
-                document.body.removeChild(ta);
+    
+    <script type="module">
+        import * as THREE from 'three';
+        
+        // ==================== THREE.JS 3D BACKGROUND ====================
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+        
+        // Ocean blue gradient background
+        const bgCanvas = document.createElement('canvas');
+        bgCanvas.width = 2;
+        bgCanvas.height = 512;
+        const bgCtx = bgCanvas.getContext('2d');
+        const gradient = bgCtx.createLinearGradient(0, 0, 0, 512);
+        gradient.addColorStop(0, '#0a1628');
+        gradient.addColorStop(0.5, '#0d2847');
+        gradient.addColorStop(1, '#0a1628');
+        bgCtx.fillStyle = gradient;
+        bgCtx.fillRect(0, 0, 2, 512);
+        const bgTexture = new THREE.CanvasTexture(bgCanvas);
+        scene.background = bgTexture;
+        
+        // Create particles representing "people working" - floating nodes connected by lines (network theme)
+        const particleCount = 150;
+        const particles = [];
+        const connections = [];
+        
+        // Create sphere geometry for particles
+        const sphereGeom = new THREE.SphereGeometry(0.08, 16, 16);
+        
+        // Create glow material
+        const createGlowMaterial = (color) => {
+            return new THREE.MeshBasicMaterial({
+                color: color,
+                transparent: true,
+                opacity: 0.8
             });
+        };
+        
+        // Colors for particles
+        const colors = [0x00d4ff, 0x0099cc, 0x00ffff, 0x40e0d0, 0x00bfff];
+        
+        for (let i = 0; i < particleCount; i++) {
+            const material = createGlowMaterial(colors[Math.floor(Math.random() * colors.length)]);
+            const mesh = new THREE.Mesh(sphereGeom, material);
+            
+            mesh.position.x = (Math.random() - 0.5) * 50;
+            mesh.position.y = (Math.random() - 0.5) * 30;
+            mesh.position.z = (Math.random() - 0.5) * 30 - 10;
+            
+            mesh.userData = {
+                velocity: new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.01
+                ),
+                originalPos: mesh.position.clone()
+            };
+            
+            particles.push(mesh);
+            scene.add(mesh);
         }
-        phoneChip.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); copyPhone(); } });
-
-        /* ===== TOAST ===== */
-        function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg; t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2800);
-        }
-
-        /* ===== TRANSLATE HALAMAN LANGSUNG (in-place) ===== */
-        const btnMap = { id: 'btnId', en: 'btnEn', ja: 'btnJa', de: 'btnDe' };
-        let currentLang = 'id';
-
-        /* Simpan teks asli saat pertama kali load */
-        let originalTexts = {};
-        const translateElements = document.querySelectorAll('[data-t]');
-
-        function storeOriginals() {
-            translateElements.forEach(el => {
-                originalTexts[el.dataset.t] = el.dataset.t;
-                /* Set teks awal dari atribut data-t */
-                el.textContent = el.dataset.t;
+        
+        // Create connecting lines (network effect)
+        const lineMaterial = new THREE.LineBasicMaterial({
+            color: 0x00d4ff,
+            transparent: true,
+            opacity: 0.15
+        });
+        
+        const lineGeometry = new THREE.BufferGeometry();
+        const linePositions = new Float32Array(particleCount * particleCount * 6);
+        lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
+        const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+        scene.add(lines);
+        
+        // Add floating "work" elements - abstract geometric shapes
+        const workShapes = [];
+        const shapes = [
+            new THREE.TorusGeometry(0.5, 0.15, 8, 16),
+            new THREE.OctahedronGeometry(0.4),
+            new THREE.IcosahedronGeometry(0.35),
+            new THREE.TetrahedronGeometry(0.45)
+        ];
+        
+        for (let i = 0; i < 20; i++) {
+            const geom = shapes[Math.floor(Math.random() * shapes.length)];
+            const mat = new THREE.MeshBasicMaterial({
+                color: colors[Math.floor(Math.random() * colors.length)],
+                transparent: true,
+                opacity: 0.3,
+                wireframe: true
             });
+            const mesh = new THREE.Mesh(geom, mat);
+            
+            mesh.position.x = (Math.random() - 0.5) * 40;
+            mesh.position.y = (Math.random() - 0.5) * 25;
+            mesh.position.z = (Math.random() - 0.5) * 20 - 15;
+            
+            mesh.userData = {
+                rotationSpeed: new THREE.Vector3(
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02,
+                    (Math.random() - 0.5) * 0.02
+                ),
+                floatSpeed: Math.random() * 0.5 + 0.5,
+                floatOffset: Math.random() * Math.PI * 2
+            };
+            
+            workShapes.push(mesh);
+            scene.add(mesh);
         }
-        storeOriginals();
-
-        /* Cache terjemahan supaya tidak fetch ulang */
-        const translationCache = {};
-
-        async function translatePage(targetLang) {
-            /* Jika bahasa sudah aktif, abaikan */
-            if (targetLang === currentLang) return;
-
-            /* Update state tombol aktif */
-            Object.values(btnMap).forEach(id => document.getElementById(id).classList.remove('active'));
-            document.getElementById(btnMap[targetLang]).classList.add('active');
-
-            /* Tampilkan overlay loading */
-            const overlay = document.getElementById('translateOverlay');
-            const statusText = document.getElementById('translateStatusText');
-            overlay.classList.add('show');
-
-            const langNames = { id: 'Bahasa Indonesia', en: 'English', ja: '日本語', de: 'Deutsch' };
-            statusText.textContent = 'Menerjemahkan ke ' + langNames[targetLang] + '...';
-
-            try {
-                /* Kumpulkan semua teks unik yang belum ada di cache */
-                const uniqueKeys = Object.keys(originalTexts);
-                const missingKeys = uniqueKeys.filter(k => !translationCache[targetLang] || !translationCache[targetLang][k]);
-
-                if (missingKeys.length > 0) {
-                    /* Bangun teks gabungan dengan delimiter unik */
-                    const delimiter = '\n|||\n';
-                    const combinedText = missingKeys.join(delimiter);
-
-                    /* Panggil Google Translate API (endpoint internal, gratis, tanpa key) */
-                    const url = 'https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl='
-                        + targetLang + '&dt=t&q=' + encodeURIComponent(combinedText);
-
-                    const response = await fetch(url);
-                    if (!response.ok) throw new Error('HTTP ' + response.status);
-                    const data = await response.json();
-
-                    /* Parse hasil: data[0] adalah array potongan terjemahan */
-                    let fullTranslation = '';
-                    if (data && data[0]) {
-                        data[0].forEach(chunk => {
-                            if (chunk && chunk[0]) fullTranslation += chunk[0];
-                        });
+        
+        // Add ambient fog
+        scene.fog = new THREE.FogExp2(0x0a1628, 0.02);
+        
+        camera.position.z = 15;
+        
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+        
+        // Animation loop
+        let time = 0;
+        function animate() {
+            requestAnimationFrame(animate);
+            time += 0.01;
+            
+            // Update particles
+            particles.forEach((p, i) => {
+                p.position.add(p.userData.velocity);
+                
+                // Boundary check
+                if (Math.abs(p.position.x) > 25) p.userData.velocity.x *= -1;
+                if (Math.abs(p.position.y) > 15) p.userData.velocity.y *= -1;
+                if (p.position.z > 5 || p.position.z < -25) p.userData.velocity.z *= -1;
+                
+                // Pulse effect
+                const scale = 0.8 + Math.sin(time * 2 + i * 0.5) * 0.3;
+                p.scale.setScalar(scale);
+            });
+            
+            // Update connections
+            const positions = lines.geometry.attributes.position.array;
+            let index = 0;
+            
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dist = particles[i].position.distanceTo(particles[j].position);
+                    if (dist < 5) {
+                        positions[index++] = particles[i].position.x;
+                        positions[index++] = particles[i].position.y;
+                        positions[index++] = particles[i].position.z;
+                        positions[index++] = particles[j].position.x;
+                        positions[index++] = particles[j].position.y;
+                        positions[index++] = particles[j].position.z;
                     }
-
-                    /* Split kembali berdasarkan delimiter */
-                    const translatedParts = fullTranslation.split(delimiter);
-
-                    /* Simpan ke cache */
-                    if (!translationCache[targetLang]) translationCache[targetLang] = {};
-                    missingKeys.forEach((key, i) => {
-                        if (translatedParts[i] !== undefined) {
-                            translationCache[targetLang][key] = translatedParts[i];
-                        }
-                    });
                 }
-
-                /* Terapkan terjemahan ke semua elemen */
-                translateElements.forEach(el => {
-                    const key = el.dataset.t;
-                    if (translationCache[targetLang] && translationCache[targetLang][key]) {
-                        el.textContent = translationCache[targetLang][key];
-                    }
-                });
-
-                currentLang = targetLang;
-                statusText.textContent = 'Berhasil diterjemahkan ke ' + langNames[targetLang];
-
-            } catch (err) {
-                console.error('Translate error:', err);
-                statusText.textContent = 'Gagal menerjemahkan. Coba lagi.';
             }
-
-            /* Sembunyikan overlay setelah 1 detik */
-            setTimeout(() => overlay.classList.remove('show'), 1000);
+            
+            for (let i = index; i < positions.length; i++) {
+                positions[i] = 0;
+            }
+            
+            lines.geometry.attributes.position.needsUpdate = true;
+            
+            // Update work shapes
+            workShapes.forEach((shape, i) => {
+                shape.rotation.x += shape.userData.rotationSpeed.x;
+                shape.rotation.y += shape.userData.rotationSpeed.y;
+                shape.rotation.z += shape.userData.rotationSpeed.z;
+                
+                shape.position.y += Math.sin(time * shape.userData.floatSpeed + shape.userData.floatOffset) * 0.005;
+            });
+            
+            // Camera follows mouse slightly
+            camera.position.x += (mouseX * 2 - camera.position.x) * 0.02;
+            camera.position.y += (mouseY * 1 - camera.position.y) * 0.02;
+            camera.lookAt(0, 0, -5);
+            
+            renderer.render(scene, camera);
         }
-
-        /* ===== JAM REALTIME ===== */
+        
+        animate();
+        
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        
+        // ==================== REAL-TIME CLOCKS ====================
         function updateClocks() {
             const now = new Date();
-            renderClock('timeJakarta', 'dateJakarta', new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' })));
-            renderClock('timeTokyo', 'dateTokyo', new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Tokyo' })));
-            renderClock('timeBerlin', 'dateBerlin', new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Berlin' })));
+            
+            const timezones = {
+                jakarta: 'Asia/Jakarta',
+                tokyo: 'Asia/Tokyo',
+                berlin: 'Europe/Berlin'
+            };
+            
+            Object.keys(timezones).forEach(city => {
+                const timeEl = document.getElementById(`clock-${city}`);
+                const dateEl = document.getElementById(`date-${city}`);
+                
+                const options = { timeZone: timezones[city], hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false };
+                const dateOptions = { timeZone: timezones[city], weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
+                
+                timeEl.textContent = now.toLocaleTimeString('en-GB', options);
+                dateEl.textContent = now.toLocaleDateString('en-GB', dateOptions);
+            });
         }
-        function renderClock(timeId, dateId, d) {
-            const h = String(d.getHours()).padStart(2, '0');
-            const m = String(d.getMinutes()).padStart(2, '0');
-            const s = String(d.getSeconds()).padStart(2, '0');
-            document.getElementById(timeId).innerHTML = h + ':' + m + '<span class="clock-sec">:' + s + '</span>';
-            const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-            const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-            document.getElementById(dateId).textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
-        }
+        
         updateClocks();
         setInterval(updateClocks, 1000);
-
-        /* ===== GELEMBUNG ===== */
-        (function() {
-            const c = document.getElementById('bubblesContainer');
-            for (let i = 0; i < 25; i++) {
-                const b = document.createElement('div'); b.classList.add('bubble');
-                const sz = Math.max(4, Math.random() * 18 + 3);
-                b.style.width = sz + 'px'; b.style.height = sz + 'px';
-                b.style.left = Math.random() * 100 + '%';
-                b.style.bottom = -(Math.random() * 60) + 'px';
-                b.style.setProperty('--drift', (Math.random() * 60 - 30) + 'px');
-                b.style.animationDuration = (Math.random() * 12 + 8) + 's';
-                b.style.animationDelay = (Math.random() * 10) + 's';
-                c.appendChild(b);
+        
+        // ==================== TRANSLATION SYSTEM ====================
+        const translations = {
+            id: {
+                name: "RIDWAN SASMITA",
+                job_title: "Teknik Elektro / Insinyur Telekomunikasi",
+                jakarta: "Jakarta (Indonesia)",
+                tokyo: "Tokyo (Jepang)",
+                berlin: "Berlin (Jerman)",
+                copy_phone: "Salin Nomor",
+                send_email: "Kirim Email",
+                profile_title: "RINGKASAN PROFIL",
+                profile_text: "Lulusan Sarjana Teknik Elektro dengan konsentrasi Telekomunikasi dari Universitas Gunadarma. Saya tertarik dan antusias terhadap solusi IT dan teknik karena memiliki pengalaman dalam instalasi, konfigurasi, troubleshooting, dan pemeliharaan jaringan fiber optik, serta telah terlibat dalam beberapa proyek pengembangan dan ekspansi jaringan mulai dari tahap perencanaan hingga implementasi. Saya juga memiliki latar belakang teknik elektro, dengan pemahaman yang kuat tentang sistem kelistrikan dan dasar-dasar jaringan komunikasi yang mendukung kinerja teknis dan operasional di lapangan.",
+                education_title: "PENDIDIKAN",
+                edu1_name: "SMAN 17 JAKARTA – JAKARTA BARAT",
+                edu1_major: "Jurusan: Ilmu Pengetahuan Alam",
+                edu1_item1: "Berpartisipasi dalam praktikum sains",
+                edu1_item2: "Penanganan Alat dan pembuatan struktur laporan akhir untuk praktikum sains",
+                edu2_name: "Universitas Gunadarma – Depok, JAWA BARAT",
+                edu2_major: "Jurusan: Sarjana Teknik Elektro bidang Telekomunikasi",
+                edu2_item1: "Berpartisipasi dalam praktikum teknik elektro dan penggunaan software MATLAB setiap semester",
+                edu2_item2: "Bergabung Organisasi Himpunan Mahasiswa Teknik Elektro dari Agustus 2021 hingga September 2022",
+                cert_title: "Sertifikasi & Pelatihan:",
+                cert1: "Desain Instalasi Penggunaan Tegangan Rendah oleh Badan Nasional Sertifikasi Profesi (BNSP)",
+                cert2: "Desain Rangkaian Elektronik Analog dengan software LTSpice oleh Universitas Gunadarma",
+                experience_title: "PENGALAMAN",
+                exp1_company: "(Magang) PT. Telkom Indonesia Tbk. – DEPOK, JAWA BARAT",
+                exp1_position: "Posisi: Teknisi Fiber Optik & Monitoring",
+                exp1_item1: "Instalasi fiber optik baru untuk pelanggan di setiap rumah",
+                exp1_item2: "Penanganan pemeliharaan pada pelanggan bermasalah",
+                exp1_item3: "Monitoring redaman fiber optik pada pelanggan",
+                exp2_company: "PT. Linknet Tbk. – JAKARTA SELATAN",
+                exp2_position: "Posisi: Helpdesk Korporat",
+                exp2_item1: "Monitoring Network Operation Center",
+                exp2_item2: "Melakukan ticketing, monitoring, dan eskalasi masalah layanan pelanggan",
+                exp2_item3: "Troubleshooting gangguan internet pelanggan",
+                project_title: "PROYEK",
+                proj1_name: "PT. TELKOMSEL – Layanan Migrasi (Vlan) DC ITDC TBS dari firewall FortiGate ke firewall Palo Alto",
+                proj2_name: "PT. TELKOMSEL – Layanan Migrasi (Vlan) DC ITDC BSD dari firewall FortiGate ke firewall Palo Alto",
+                proj_position: "Posisi: Project Engineer",
+                proj_item1: "Migrasi data IP Centre / Vlan dari Fortigate ke Palo Alto Firewall menggunakan software Palo Alto dan Putty/SecureCRT SSH",
+                proj_item2: "Monitoring IP Centre / Vlan",
+                proj_item3: "Troubleshooting pemeliharaan IP Centre / Vlan",
+                proj_item4: "Analisis IP data center bermasalah menggunakan google spreadsheets dan software Palo Alto",
+                org_title: "PENGALAMAN ORGANISASI",
+                org_name: "Himpunan Mahasiswa Teknik Elektro Universitas Gunadarma",
+                org_division: "Divisi: Ketua Divisi Media Informasi",
+                org_item1: "Membuat desain hari besar dan memposting di media sosial",
+                org_item2: "Membuat gambar desain proyek pada acara yang ditetapkan",
+                org_item3: "Melaporkan kinerja divisi di akhir setiap bulan pada rapat",
+                skill_title: "KEAHLIAN",
+                soft_skill: "SOFT SKILL",
+                hard_skill: "HARD SKILL",
+                skill_problem: "KEMAMPUAN PEMECAHAN MASALAH YANG BAIK",
+                skill_pressure: "KEMAMPUAN MENGHADAPI TEKANAN",
+                skill_modulation: "Modulasi Amplitudo",
+                skill_fm: "Modulasi Frekuensi",
+                skill_fiber: "Fiber Optik",
+                skill_cacti: "Cacti (Monitoring Grafik Jaringan)",
+                lang_title: "BAHASA",
+                lang1: "1. Bahasa Inggris (Tertulis)",
+                lang2: "2. Bahasa Indonesia (Menengah)",
+                footer: "Curriculum Vitae - Ridwan Sasmita"
+            },
+            en: {
+                name: "RIDWAN SASMITA",
+                job_title: "Electrical Engineering / Telecommunication Engineer",
+                jakarta: "Jakarta (Indonesia)",
+                tokyo: "Tokyo (Japan)",
+                berlin: "Berlin (Germany)",
+                copy_phone: "Copy Number",
+                send_email: "Send Email",
+                profile_title: "PROFILE SUMMARY",
+                profile_text: "Graduated with a Bachelor of Electrical Engineering majoring in Telecommunication from Gunadarma University. I interested and enthusiastic about IT solutions and engineering because I have experience in installation, configuration, troubleshooting, and maintenance of fiber optic networks, and have been involved in several network development and expansion projects from the planning stage to implementation. I also have a background in electrical engineering, with a strong understanding of electrical systems and the fundamentals of communication networks that support technical and operational performance in the field.",
+                education_title: "EDUCATION",
+                edu1_name: "SMAN 17 JAKARTA – WEST JAKARTA",
+                edu1_major: "Major: Department of Natural Science",
+                edu1_item1: "Participation in science practicum",
+                edu1_item2: "Handling Tools and creating the final report structure for science practicums",
+                edu2_name: "Gunadarma University – Depok, WEST JAVA",
+                edu2_major: "Major: Bachelor Degree of Electrical Engineering in field Telecommunications",
+                edu2_item1: "Participation in electrical engineering practicums and use of MATLAB software each semester",
+                edu2_item2: "Joined Organizational Electrical Engineering Student Association from August 2021 to September 2022",
+                cert_title: "Certification & Training:",
+                cert1: "Design of Low Voltage Utilization Installations by Badan Nasional Sertifikasi Profesi (BNSP)",
+                cert2: "Analog Electronic Circuit Design with LTSpice software by Gunadarma University",
+                experience_title: "EXPERIENCE",
+                exp1_company: "(Internship) PT. Telkom Indonesia Tbk. – DEPOK, WEST JAVA",
+                exp1_position: "Position: Optical Fibre Technician & Monitoring",
+                exp1_item1: "New fibre optic installations for customers in every home",
+                exp1_item2: "Handling maintenances on problem customers",
+                exp1_item3: "Monitoring fiber optic attenuation in customers",
+                exp2_company: "PT. Linknet Tbk. – SOUTH JAKARTA",
+                exp2_position: "Position: Corporate Helpdesk",
+                exp2_item1: "Monitoring Network Operation Center",
+                exp2_item2: "Performing ticketing, monitoring, and escalating customer service issues",
+                exp2_item3: "Troubleshooting customer internet disruptions",
+                project_title: "PROJECT",
+                proj1_name: "PT. TELKOMSEL – Migration Services (Vlan) DC ITDC TBS from FortiGate firewall to Palo Alto firewall",
+                proj2_name: "PT. TELKOMSEL – Migration Services (Vlan) DC ITDC BSD from FortiGate firewall to Palo Alto firewall",
+                proj_position: "Position: Project Engineer",
+                proj_item1: "IP Centre / Vlan data migration Fortigate from Firewall to Palo Alto Firewall using Palo Alto and Putty/ SecureCRT SSH software",
+                proj_item2: "IP Centre / Vlan Monitoring",
+                proj_item3: "Troubleshooting IP Centre / Vlan Maintenance",
+                proj_item4: "Problematic IP data centre analysis using google spreadsheets and Palo Alto Software",
+                org_title: "ORGANIZATION EXPERIENCE",
+                org_name: "Gunadarma University Electrical Student Association",
+                org_division: "Division: Head of Media Information Division",
+                org_item1: "Create a big day designs and post on social media",
+                org_item2: "Create project design images on set events",
+                org_item3: "Reporting the division's performance at the end of each month at meetings",
+                skill_title: "SKILL",
+                soft_skill: "SOFT SKILL",
+                hard_skill: "HARD SKILL",
+                skill_problem: "GOOD PROBLEM-SOLVING SKILL",
+                skill_pressure: "ABILITY TO HANDLE PRESSURE",
+                skill_modulation: "Amplitude Modulation",
+                skill_fm: "Frequency Modulation",
+                skill_fiber: "Fiber Optic",
+                skill_cacti: "Cacti (Monitoring Graph Network)",
+                lang_title: "LANGUAGES",
+                lang1: "1. English (Written)",
+                lang2: "2. Indonesia (Intermediate)",
+                footer: "Curriculum Vitae - Ridwan Sasmita"
+            },
+            ja: {
+                name: "RIDWAN SASMITA",
+                job_title: "電気工学 / 通信エンジニア",
+                jakarta: "ジャカルタ (インドネシア)",
+                tokyo: "東京 (日本)",
+                berlin: "ベルリン (ドイツ)",
+                copy_phone: "番号をコピー",
+                send_email: "メールを送信",
+                profile_title: "プロフィール概要",
+                profile_text: "グナダルマ大学で通信専攻の電気工学学士号を取得して卒業しました。光ファイバーネットワークの設置、設定、トラブルシューティング、メンテナンスの経験があり、計画段階から実装までいくつかのネットワーク開発・拡張プロジェクトに携わってきたため、ITソリューションとエンジニアリングに興味と熱意を持っています。また、電気工学の背景を持ち、現場での技術的・運用的パフォーマンスを支える電気システムと通信ネットワークの基礎について強い理解を持っています。",
+                education_title: "学歴",
+                edu1_name: "SMAN 17 ジャカルタ – 西ジャカルタ",
+                edu1_major: "専攻: 自然科学科",
+                edu1_item1: "科学実習への参加",
+                edu1_item2: "器具の取り扱いと科学実習の最終レポート構成の作成",
+                edu2_name: "グナダルマ大学 – デポック, 西ジャワ",
+                edu2_major: "専攻: 通信分野の電気工学学士号",
+                edu2_item1: "電気工学実習への参加と各学期のMATLABソフトウェアの使用",
+                edu2_item2: "2021年8月から2022年9月まで電気工学学生協会組織に参加",
+                cert_title: "認定・研修:",
+                cert1: "国家職業認定機関(BNSP)による低圧利用設備設計",
+                cert2: "グナダルマ大学によるLTSpiceソフトウェアを用いたアナログ電子回路設計",
+                experience_title: "職歴",
+                exp1_company: "(インターン) PT. Telkom Indonesia Tbk. – デポック, 西ジャワ",
+                exp1_position: "職位: 光ファイバーテクニシャン & 監視",
+                exp1_item1: "各家庭の顧客向け新規光ファイバー設置",
+                exp1_item2: "問題のある顧客のメンテナンス対応",
+                exp1_item3: "顧客の光ファイバー減衰の監視",
+                exp2_company: "PT. Linknet Tbk. – 南ジャカルタ",
+                exp2_position: "職位: 法人ヘルプデスク",
+                exp2_item1: "ネットワークオペレーションセンター監視",
+                exp2_item2: "チケット発行、監視、顧客サービス問題のエスカレーション実施",
+                exp2_item3: "顧客のインターネット障害トラブルシューティング",
+                project_title: "プロジェクト",
+                proj1_name: "PT. TELKOMSEL – FortiGateファイアウォールからPalo AltoファイアウォールへのDC ITDC TBS Vlan移行サービス",
+                proj2_name: "PT. TELKOMSEL – FortiGateファイアウォールからPalo AltoファイアウォールへのDC ITDC BSD Vlan移行サービス",
+                proj_position: "職位: プロジェクトエンジニア",
+                proj_item1: "Palo AltoおよびPutty/SecureCRT SSHソフトウェアを使用したFortigateからPalo AltoファイアウォールへのIP Centre/Vlanデータ移行",
+                proj_item2: "IP Centre / Vlan 監視",
+                proj_item3: "IP Centre / Vlan メンテナンスのトラブルシューティング",
+                proj_item4: "GoogleスプレッドシートとPalo Altoソフトウェアを使用した問題のあるIPデータセンター分析",
+                org_title: "組織経験",
+                org_name: "グナダルマ大学電気工学学生協会",
+                org_division: "部門: 情報メディア部門長",
+                org_item1: "記念日のデザイン作成とソーシャルメディアへの投稿",
+                org_item2: "設定イベントでのプロジェクトデザイン画像作成",
+                org_item3: "毎月末の会議での部門パフォーマンス報告",
+                skill_title: "スキル",
+                soft_skill: "ソフトスキル",
+                hard_skill: "ハードスキル",
+                skill_problem: "優れた問題解決能力",
+                skill_pressure: "プレッシャーに対処する能力",
+                skill_modulation: "振幅変調",
+                skill_fm: "周波数変調",
+                skill_fiber: "光ファイバー",
+                skill_cacti: "Cacti (ネットワークグラフ監視)",
+                lang_title: "言語",
+                lang1: "1. 英語 (筆記)",
+                lang2: "2. インドネシア語 (中級)",
+                footer: "履歴書 - Ridwan Sasmita"
+            },
+            de: {
+                name: "RIDWAN SASMITA",
+                job_title: "Elektrotechnik / Telekommunikationsingenieur",
+                jakarta: "Jakarta (Indonesien)",
+                tokyo: "Tokio (Japan)",
+                berlin: "Berlin (Deutschland)",
+                copy_phone: "Nummer kopieren",
+                send_email: "E-Mail senden",
+                profile_title: "PROFILZUSAMMENFASSUNG",
+                profile_text: "Absolvent eines Bachelor-Studiums der Elektrotechnik mit Schwerpunkt Telekommunikation an der Gunadarma-Universität. Ich interessiere mich und bin begeistert von IT-Lösungen und Ingenieurwesen, da ich Erfahrung in Installation, Konfiguration, Fehlerbehebung und Wartung von Glasfasernetzen habe und an mehreren Netzwerkentwicklungs- und Erweiterungsprojekten von der Planungsphase bis zur Umsetzung beteiligt war. Ich habe auch einen Hintergrund in der Elektrotechnik mit einem starken Verständnis von elektrischen Systemen und den Grundlagen der Kommunikationsnetze, die die technische und betriebliche Leistung im Feld unterstützen.",
+                education_title: "AUSBILDUNG",
+                edu1_name: "SMAN 17 JAKARTA – WEST JAKARTA",
+                edu1_major: "Fachbereich: Naturwissenschaften",
+                edu1_item1: "Teilnahme an Wissenschaftspraktika",
+                edu1_item2: "Handhabung von Werkzeugen und Erstellung der Abschlussberichtstruktur für Wissenschaftspraktika",
+                edu2_name: "Gunadarma-Universität – Depok, WEST JAVA",
+                edu2_major: "Studiengang: Bachelor-Abschluss in Elektrotechnik im Bereich Telekommunikation",
+                edu2_item1: "Teilnahme an Elektrotechnikpraktika und Verwendung von MATLAB-Software in jedem Semester",
+                edu2_item2: "Mitgliedschaft in der Elektrotechnik-Studentenvereinigung von August 2021 bis September 2022",
+                cert_title: "Zertifizierung & Schulung:",
+                cert1: "Planung von Niederspannungs-Nutzungsanlagen durch Badan Nasional Sertifikasi Profesi (BNSP)",
+                cert2: "Analoger elektronischer Schaltungsdesign mit LTSpice-Software durch Gunadarma-Universität",
+                experience_title: "ERFAHRUNG",
+                exp1_company: "(Praktikum) PT. Telkom Indonesia Tbk. – DEPOK, WEST JAVA",
+                exp1_position: "Position: Glasfasertechniker & Überwachung",
+                exp1_item1: "Neue Glasfaserinstallationen für Kunden in jedem Haus",
+                exp1_item2: "Wartung bei Problemen mit Kunden",
+                exp1_item3: "Überwachung der Glasfaserdämpfung bei Kunden",
+                exp2_company: "PT. Linknet Tbk. – SÜD-JAKARTA",
+                exp2_position: "Position: Corporate Helpdesk",
+                exp2_item1: "Überwachung des Network Operation Center",
+                exp2_item2: "Ticketing, Überwachung und Eskalation von Kundendienstproblemen",
+                exp2_item3: "Fehlerbehebung bei Internetstörungen der Kunden",
+                project_title: "PROJEKT",
+                proj1_name: "PT. TELKOMSEL – Migrationsdienstleistungen (Vlan) DC ITDC TBS von FortiGate-Firewall zu Palo Alto-Firewall",
+                proj2_name: "PT. TELKOMSEL – Migrationsdienstleistungen (Vlan) DC ITDC BSD von FortiGate-Firewall zu Palo Alto-Firewall",
+                proj_position: "Position: Projektingenieur",
+                proj_item1: "IP Centre / Vlan Datenmigration von Fortigate-Firewall zu Palo Alto-Firewall mit Palo Alto und Putty/SecureCRT SSH Software",
+                proj_item2: "IP Centre / Vlan Überwachung",
+                proj_item3: "Fehlerbehebung IP Centre / Vlan Wartung",
+                proj_item4: "Analyse problematischer IP-Rechenzentrumsdaten mit Google Tabellen und Palo Alto Software",
+                org_title: "ORGANISATIONSERFAHRUNG",
+                org_name: "Elektrotechnik-Studentenvereinigung der Gunadarma-Universität",
+                org_division: "Abteilung: Leiter der Medieninformationsabteilung",
+                org_item1: "Erstellung von Design für besondere Tage und Veröffentlichung in sozialen Medien",
+                org_item2: "Erstellung von Projektdesign-Bildern bei Veranstaltungen",
+                org_item3: "Berichterstattung über die Leistung der Abteilung am Ende jedes Monats in Sitzungen",
+                skill_title: "KENNTNISSE",
+                soft_skill: "SOFT SKILLS",
+                hard_skill: "HARD SKILLS",
+                skill_problem: "GUTE PROBLEMLÖSUNGSFÄHIGKEITEN",
+                skill_pressure: "FÄHIGKEIT, DRUCK ZU BEWÄLTIGEN",
+                skill_modulation: "Amplitudenmodulation",
+                skill_fm: "Frequenzmodulation",
+                skill_fiber: "Glasfaser",
+                skill_cacti: "Cacti (Netzwerkgraph-Überwachung)",
+                lang_title: "SPRACHEN",
+                lang1: "1. Englisch (Schriftlich)",
+                lang2: "2. Indonesisch (Mittelstufe)",
+                footer: "Lebenslauf - Ridwan Sasmita"
             }
-        })();
-
-        /* ===== SCROLL REVEAL ===== */
-        const revealObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-        }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-        document.querySelectorAll('[data-reveal]').forEach(el => revealObserver.observe(el));
-
-        /* ===== PARALLAX MOUSE ===== */
-        const heroSection = document.getElementById('heroSection');
-        const oceanBg = document.getElementById('oceanBg');
-        heroSection.addEventListener('mousemove', (e) => {
-            const rect = heroSection.getBoundingClientRect();
-            const x = (e.clientX - rect.left) / rect.width - 0.5;
-            const y = (e.clientY - rect.top) / rect.height - 0.5;
-            oceanBg.style.transform = 'translate(' + (x * -12) + 'px, ' + (y * -8) + 'px)';
+        };
+        
+        let currentLang = 'id';
+        
+        function translatePage(lang) {
+            currentLang = lang;
+            const t = translations[lang];
+            
+            document.querySelectorAll('[data-translate]').forEach(el => {
+                const key = el.getAttribute('data-translate');
+                if (t[key]) {
+                    el.textContent = t[key];
+                }
+            });
+            
+            // Update button states
+            document.querySelectorAll('.translate-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-lang') === lang) {
+                    btn.classList.add('active');
+                }
+            });
+        }
+        
+        // Initialize translate buttons
+        document.querySelectorAll('.translate-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const lang = btn.getAttribute('data-lang');
+                translatePage(lang);
+            });
         });
-        heroSection.addEventListener('mouseleave', () => {
-            oceanBg.style.transform = 'translate(0, 0)';
-            oceanBg.style.transition = 'transform 0.6s ease';
-            setTimeout(() => oceanBg.style.transition = '', 600);
+        
+        // Initialize with Indonesian
+        translatePage('id');
+        
+        // ==================== CONTACT BUTTONS ====================
+        const toast = document.getElementById('toast');
+        
+        function showToast(message) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Phone copy button
+        document.getElementById('btn-phone').addEventListener('click', () => {
+            navigator.clipboard.writeText('081226834082').then(() => {
+                showToast('Nomor telepon berhasil disalin: 081226834082');
+            }).catch(() => {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = '081226834082';
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                showToast('Nomor telepon berhasil disalin: 081226834082');
+            });
+        });
+        
+        // ==================== SCROLL REVEAL ====================
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.classList.add('visible');
+                    }, index * 100);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
         });
     </script>
 </body>
